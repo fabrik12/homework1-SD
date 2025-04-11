@@ -5,12 +5,16 @@ from werkzeug.utils import secure_filename
 from app import app
 
 def validate_image(stream):
-    header = stream.read(512)
-    stream.seek(0)
-    format = imghdr.what(None, header)
-    if not format:
+    try:
+        header = stream.read(1024)
+        stream.seek(0)
+        format = imghdr.what(None, header)
+        if not format:
+            return None
+        return '.' + format
+    except Exception as e:
+        print(f"Error al validar la imagen: {e}")
         return None
-    return '.' + (format if format != 'jpeg' else 'jpg')
 
 @app.route('/')
 def index():
