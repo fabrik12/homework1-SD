@@ -9,5 +9,12 @@
       <p><input type="file" name="file" multiple></p>
       <p><input type="submit" value="Submit"></p>
     </form>
+    <hr>
+    
+    <!--<img src="static/Cat03.jpg" style="width: 64px">-->
+
+    {% for file in files %}
+        <img src="{{ url_for('upload', filename=file) }}" style="width: 64px">
+    {% endfor %}
   </body>
 </html>

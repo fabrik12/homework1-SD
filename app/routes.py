@@ -1,5 +1,6 @@
 import os, imghdr
-from flask import render_template, request, redirect, url_for, abort
+from flask import render_template, request, redirect, url_for, abort, \
+        send_from_directory
 from werkzeug.utils import secure_filename
 from app import app
 
@@ -13,7 +14,8 @@ def validate_image(stream):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    files = os.listdir("app/" + app.config['UPLOAD_FOLDER'])
+    return render_template('index.html', files=files)
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -27,5 +29,11 @@ def upload_file():
         if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
                 file_ext != validate_image(uploaded_file.stream):
             abort(400)
-        uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        uploaded_file.save(os.path.join("app/"+ app.config['UPLOAD_FOLDER'], filename))
     return redirect(url_for('index'))
+
+@app.route('/uploads/<filename>')
+def upload(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+

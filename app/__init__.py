@@ -1,6 +1,6 @@
 from flask import Flask
 
-UPLOAD_FOLDER = './app/uploads'
+UPLOAD_FOLDER = 'static'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
